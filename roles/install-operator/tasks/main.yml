@@ -1,0 +1,29 @@
+---
+- name: Login in OpenShift
+  shell: "oc login --insecure-skip-tls-verify=true -u {{ username }} -p {{ password }} {{ master_url }}"
+  connection: local
+
+- name: Create istio operator namespace
+  shell: "oc new-project istio-operator"
+  connection: local
+  ignore_errors: true
+
+- name: Install istio operator
+  shell: "oc new-app -f {{ template_url }} --param={{ template_params }}"
+  connection: local
+
+- name: create temporary file
+  tempfile:
+    state: file
+    suffix: yml
+  register: templatedInstallation
+
+- name: installation template
+  template:
+    src: "../files/istio-installation.yml"
+    dest: "{{templatedInstallation.path}}"
+  connection: local
+
+- name: Install istio
+  shell: "oc create -f {{templatedInstallation.path}}"
+  connection: local

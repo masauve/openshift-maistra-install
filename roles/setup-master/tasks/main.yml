@@ -1,0 +1,14 @@
+---
+- name: Copy ISTIO patch to masters
+  copy:
+    src: ../files/master-config.patch
+    dest: /etc/origin/master/master-config.patch
+
+- name: backup master-config.yaml
+  copy:
+    src: /etc/origin/master/master-config.yaml
+    dest: /etc/origin/master/master-config.yaml.prepatch
+    remote_src: true
+
+- name: patch master config
+  shell: "oc ex config patch /etc/origin/master/master-config.yaml.prepatch -p \"$(cat /etc/origin/master/master-config.patch)\" > /etc/origin/master/master-config.yaml"

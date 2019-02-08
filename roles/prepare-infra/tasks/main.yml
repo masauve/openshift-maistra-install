@@ -1,0 +1,7 @@
+---
+- name: Update host configuration for ISTIO
+  hosts: nodes
+  sysctl:
+    name: vm.max_map_count
+    value: 262144
+    state: present

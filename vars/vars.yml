@@ -1,0 +1,24 @@
+# OpenShift connection information
+username: admin
+password: admin
+master_url: myocp.net:8443
+
+
+# The template to use to create the ISTIO operator
+template_url: https://raw.githubusercontent.com/Maistra/openshift-ansible/maistra-0.6/istio/istio_product_operator_template.yaml
+template_params: "OPENSHIFT_ISTIO_MASTER_PUBLIC_URL={{ master_url }}"
+
+
+# The name of the application, all of the dc, bc, is, container name, etc must be using this name
+app_name: spring-crud
+
+# What environments use for the prefix, i.e. spring-crud-dev, spring-crud-test where "spring-crud" would the prefix
+project_prefix: spring-crud
+display_prefix: "Spring Crud"
+
+# Pipeline smoke test with curl
+test_port: "8080"
+test_path: "api/fruits"
+
+# Whether to use ephemeral template
+jenkins_persistent: false
